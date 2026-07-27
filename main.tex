@@ -212,15 +212,16 @@ S(t) = \{G_0(\Omega), x_u(t), E_{\Delta}(t), U(t), H(t)\},
 where \(G_0(\Omega)\) is the geospatial prior, \(x_u(t)\) is UAV state, \(E_{\Delta}(t)\) is the set of semantic updates, \(U(t)\) contains uncertainty/freshness annotations, and \(H(t)\) denotes the VR-headset view. This model allows the system to remain useful when live video is degraded: the display is not blank because \(G_0(\Omega)\), \(x_u(t)\), and the last validated \(E_{\Delta}(t)\) provide bounded spatial context.
 
 \subsection{Detection-to-World Projection}
-The georeferencing step estimates world coordinates using explicit camera, pose, and terrain assumptions. A detector returns a bounding box \(b=[x_1,y_1,x_2,y_2]^T\), and the projected ground-contact pixel is the bottom-centre point:
+\label{sec:detection-to-world}
+The georeferencing step converts one bounding box into one world position under explicit camera, pose, and terrain assumptions (Figure~\ref{fig:visual-pipeline}, zone~A). The detector returns a box \(b=[x_1,y_1,x_2,y_2]^T\); because the objects of interest rest on the ground, the contact evidence is the bottom-centre pixel of the box,
 \begin{equation}
-z_b = \begin{bmatrix} u_b \\ v_b \end{bmatrix} = \begin{bmatrix} (x_1+x_2)/2 \\ y_2 \end{bmatrix}.
+z_b = \begin{bmatrix} u_b \\ v_b \end{bmatrix} = \begin{bmatrix} (x_1+x_2)/2 \\ y_2 \end{bmatrix},
 \end{equation}
-Using a pinhole approximation from image size \(W\times H\) and vertical FOV \(\psi_v\), the normalized camera-frame ray for \(z_b\) is mapped to the UAV body frame and then to local North--East--Down (NED) using UAV yaw, pitch, and roll. With NED down positive and UAV height \(h\), the ground-plane intersection yields North/East offsets:
+which is the pixel least sensitive to box width noise and to the object's visible extent above the ground plane. Under a pinhole model with image size \(W\times H\) and calibrated vertical field of view \(\psi_v\), \(z_b\) maps to a unit ray in the camera frame; the ray is then rotated into the UAV body frame using the known camera mount, and into local North--East--Down (NED) using the attitude (yaw, pitch, roll) logged by the autopilot. The mount and attitude terms are what place the ray off-nadir in Figure~\ref{fig:visual-pipeline}: the estimate never assumes the camera points straight down. With NED down positive and the ray \(\hat r_n=[r_{n,N}, r_{n,E}, r_{n,D}]^T\), intersection with the local ground plane at UAV height \(h\) (AGL) gives
 \begin{equation}
-t_b = \frac{h}{r_{n,D}}, \quad N=t_b r_{n,N}, \quad E=t_b r_{n,E}, \quad d_h=\sqrt{N^2+E^2}.
+t_b = \frac{h}{r_{n,D}}, \quad N=t_b r_{n,N}, \quad E=t_b r_{n,E}, \quad d_h=\sqrt{N^2+E^2},
 \end{equation}
-For the Unreal/Cesium runtime, this estimate is expressed in a local tangent frame and published as \code{world\_m}. This projection is sensitive to bounding-box choice, camera calibration, and timestamp synchronization; therefore, the projected position is an estimate, not a proof of target location.
+so the world position is the aircraft position translated by \((N,E)\) in the local tangent frame, published to the twin as \code{world\_m}. Four assumptions bound the estimate: a calibrated FOV and mount, flat local terrain, tight video--telemetry timestamp alignment, and a ground-contact object. The dominant error source is attitude noise scaling with \(t_b\): the longer the slant range, the more a fraction of a degree moves the ground point, which is why off-nadir geometry---not detector accuracy---sets the error floor. The measured end-to-end error of the complete chain (detector, projection, synchronization, and twin placement) is 4.3~m against orthophoto ground truth for the validated support (Section~\ref{sec:trajectory-fidelity}), and the replayed aircraft trajectory is reproduced within 0.24~m; the projection is therefore used as an estimate with a measured error envelope, not as a proof of target location.
 
 \subsection{Semantic Telemetry Bandwidth}
 For a mission interval \(T\), with \(N\) entity messages of size \(|m_k|\) bytes, semantic telemetry bitrate is:
@@ -270,6 +271,7 @@ The measured detection-to-display latency averages 38.2~ms with a p95 of 252.9~m
 \end{figure}
 
 \subsection{Trajectory Fidelity and Geospatial Accuracy}
+\label{sec:trajectory-fidelity}
 The twin aircraft was driven by the service-published world positions. Against the reference trajectory, the commanded path shows a cross-track error of 0.24~m maximum ($n=2363$). Ground truth for power-line supports was marked on PNOA orthophotos. A robust cluster analysis places the main cluster (216 observations, support P3) at 4.3~m from its orthophoto position; the end-to-end georeferencing error is approximately 4--5~m for the validated support at 40--130~m range. Residual error sources: camera-mount residual (2--8~m) and video--log synchronization (8--12~m along track).
 
 \begin{figure}[t]
@@ -291,6 +293,10 @@ The twin aircraft was driven by the service-published world positions. Against t
 To confirm that the desktop twin can host the Cesium geospatial prior together with the reconstructed semantic actors without becoming frame-bound, we measured the engine on the workstation listed in Table~\ref{tab:implementation-config} (AMD Ryzen~9 9950X, RTX~5090, 64~GB RAM). The benchmark replayed synthetic obstacle payloads through the same ingestion path used at runtime and reported per-phase frame time (p50/p95) together with estimated component, triangle, and draw-call counts.
 
 Across the measured scene sizes, the create, pose-stream, and shape-stream phases stayed below a 33.3~ms (30~FPS) p95 budget up to 100 reconstructed semantic-proxy actors, while the Unreal CSV profiler reported a global \code{GPUTime} p50/p95 of 1.46/1.67~ms and \code{FrameTime} p50/p95 of 4.66/6.32~ms on the lighter global workload. Table~\ref{tab:render-performance} summarizes the per-phase frame time of the actor-level semantic-proxy backend. The 100-object pose- and shape-update streams exceeded a 16.7~ms (60~FPS) p95 budget (17.8~ms and 19.3~ms respectively), which bounds the dense-scene update rate but leaves single-frame rendering headroom on this hardware. These measurements are non-stereoscopic desktop measurements; they establish a smooth desktop baseline for the geospatial prior and dynamic actors and do not constitute VR-headset frame-rate validation.
+
+\subsection{Stereoscopic Rendering Path and HMD Frame Budget}
+\label{sec:hmd-budget}
+The immersive display is served by the same Unreal scene through the engine's OpenXR stereoscopic path: one scene update produces both eye views, so the semantic-actor lifecycle measured above is shared between eyes and the only additional cost over the desktop baseline is the second view's rasterization and the compositor stage. Against the Meta Quest~2 90~Hz reference budget of 11.1~ms per frame (Table~\ref{tab:implementation-config}), the measured global frame time of the desktop scene (p50/p95 4.66/6.32~ms, with \code{GPUTime} 1.46/1.67~ms) leaves a factor of about two of headroom: even under a conservative assumption that the stereo pair doubles the render cost, the projected p95 stays within the 90~Hz budget, and within the 72~Hz budget (13.9~ms) with wider margin. This is an analytic bound derived from the desktop profile, not a headset measurement---HMD presentation latency, sustained stereoscopic frame rate under thermal limits, and source-to-photon delay are not covered by it---but it removes the engine cost as a plausible blocker for the headset deployment and narrows the open HMD questions to the compositor and the human factors study (Section~\ref{sec:hmd-feasibility}).
 
 \begin{table}[H]
 \centering
