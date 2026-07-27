@@ -34,7 +34,7 @@
 \RevisedDate{}
 \AcceptDate{}
 
-\title{A VR-Headset Visual Pipeline for UAV Pilot Situational Awareness: Combining Geospatial Priors and Semantic Object State in an Unreal Engine Digital Twin}{VR-Headset Visual Pipeline for UAV Teleoperation}
+\title{A VR Digital Twin for UAV Teleoperation under Degraded Video Links: Geospatial Priors and Semantic Object-State Telemetry in Unreal Engine}{VR Digital Twin for UAV Teleoperation}
 
 \author[1]{Xabier OLAZ}{}
 \author[1]{Daniel ALAEZ}{}
@@ -217,6 +217,10 @@ S(t) = \{G_0(\Omega), x_u(t), E_{\Delta}(t), U(t), H(t)\},
 \end{equation}
 where \(G_0(\Omega)\) is the geospatial prior, \(x_u(t)\) is UAV state, \(E_{\Delta}(t)\) is the set of semantic updates, \(U(t)\) contains uncertainty/freshness annotations, and \(H(t)\) denotes the VR-headset view. This model allows the system to remain useful when live video is degraded: the display is not blank because \(G_0(\Omega)\), \(x_u(t)\), and the last validated \(E_{\Delta}(t)\) provide bounded spatial context.
 
+\subsection{Scene-State Visual Encoding in the HMD}
+\label{sec:visual-encoding}
+The layered state of Section~\ref{sec:scene-state} is only useful if the operator can read evidence quality at a glance, so each layer is assigned a distinct visual channel rather than a distinct menu or window. The geospatial prior \(G_0\) renders as the muted photorealistic Cesium base---recognizable but visually subordinate. Live entities (information role \textit{live}) render as saturated proxy actors. Stale entities are demoted, not deleted: on crossing the staleness threshold \(\tau_{\mathrm{stale}}\) (30~s for static tracks, 4~s for dynamic ones in the replay configuration) the actor loses saturation and acquires an age annotation, so that aged evidence remains visible but can no longer masquerade as current; on track expiry the actor despawns. Positional uncertainty \(\Sigma_i\) is rendered as an explicit bounded volume around the entity rather than hidden inside a point estimate, and confidence gates entry into the scene in the first place. Two properties make this encoding VR-specific rather than a transplanted HUD convention. First, demotion and uncertainty are read through stereoscopic depth and head-tracked inspection---the operator assesses \emph{where} the evidence is weak in the same 3D frame used for the mission, without diverting gaze to a side panel. Second, the encoding is the only channel through which the freshness of a semantic stream becomes spatially inspectable: a video feed can degrade, but it cannot display the provenance and age of the information it carries. The encoding rules are enforced by the actor lifecycle and bounded by the safety envelope (Section~\ref{sec:limitations}), which exists precisely to prevent a clean, confident-looking render from overstating the evidence behind it.
+
 \subsection{Detection-to-World Projection}
 \label{sec:detection-to-world}
 The georeferencing step converts one bounding box into one world position under explicit camera, pose, and terrain assumptions (Figure~\ref{fig:visual-pipeline}, zone~A). The detector returns a box \(b=[x_1,y_1,x_2,y_2]^T\); because the objects of interest rest on the ground, the contact evidence is the bottom-centre pixel of the box,
@@ -329,6 +333,7 @@ Network degradation was simulated using loss and jitter profiles: visible-entity
 As a preliminary feasibility check (not a controlled validation), one operator wearing a Meta Quest~2 headset (Table~\ref{tab:implementation-config}) could visually identify the reconstructed semantic actors of the three canonical classes used in the workflow---power-line supports (\textit{tower}), livestock (\textit{cow}), and vehicles/bicycles (\textit{bike})---from the semantic state stream alone, without any video feed. The proxy actors reconstructed by Unreal were discriminable in the immersive view against the Cesium geospatial prior. This observation is reported as perceptual feasibility only: it involves a single operator, no baseline condition (video-only, prior-only, non-immersive hybrid), and no workload instrument, so it does not establish operator benefit. Its role is to motivate, not to substitute for, the controlled operator study defined as future work (Section~\ref{sec:discussion}).
 
 \section{Limitations and Safety Envelope}
+\label{sec:limitations}
 
 The VR-Headset Visual Pipeline can mislead an operator if uncertainty is hidden, and several limitations are inherent to the system definition. On the semantic side, an absent actor may denote an undetected object rather than safe empty space, and a stale actor can retain an authoritative appearance unless its age, source, and confidence are visibly demoted in the display. On the geospatial side, the prior can be outdated, omit temporary obstacles such as cables, and accumulate placement errors whenever terrain or coordinate systems are misaligned; the measured 4--5~m error therefore bounds the display to spatial-awareness support rather than precision maneuvering.
 
