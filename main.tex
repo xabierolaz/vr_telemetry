@@ -240,7 +240,7 @@ The software-only segments can be instrumented immediately. The complete source-
 \label{sec:results}
 
 \subsection{Replay Setup and Synchronization}
-The validation uses a recorded power-line inspection flight (M\_20\_1RR). The onboard video was processed into an analysis segment (1280$\times$960, 10~fps) and synchronized to the autopilot log by content matching against the recorded frames. A tower detector fine-tuned from a YOLOE-26s base reaches mAP50 0.982. Detected supports are georeferenced, tracked by the ground-station service, and reconstructed as proxy actors.
+The validation uses a recorded power-line inspection flight (M\_20\_1RR) operated by FuVeX Civil S.L. The onboard video was processed into an analysis segment (1280$\times$960, 10~fps) and synchronized to the autopilot log by content matching against the recorded frames. A tower detector fine-tuned from a YOLOE-26s base reaches mAP50 0.982. Detected supports are georeferenced, tracked by the ground-station service, and reconstructed as proxy actors.
 
 \begin{figure}[t]
     \centering
@@ -340,7 +340,7 @@ This structure makes the core hypothesis falsifiable. The pipeline is supported 
 The VR-Headset Visual Pipeline is presented as a human-in-the-loop digital-twin operator display for UAV teleoperation. The implemented workflow uses Unreal/Cesium as a bounded geospatial prior, converts detected changes into semantic telemetry, publishes a live entity snapshot through the ground-station service, and reconstructs dynamic actors inside a VR-headset-visible scene. The publishable contribution is that the integrated VR-headset scene layer can be specified, instrumented, and evaluated as an operator aid for spatial awareness when video-only displays may be insufficient. The stored-flight replay validation confirms content-synchronized video and telemetry, detection at mAP50 0.982, semantic telemetry at 1.67~Mbps mission-normalized (84.0\% and 70.4\% below H.264 and H.265), detection-to-display latency of 38.2~ms mean, sub-metre trajectory fidelity, and a 4.3~m geospatial error against orthophoto ground truth.
 
 \section*{Acknowledgements}
-The authors thank the Institute of Smart Cities (Public University of Navarre) for institutional support.
+The authors thank the Institute of Smart Cities (Public University of Navarre) for institutional support, and FuVeX Civil S.L. for providing the power-line inspection flight recording and autopilot logs used in the validation.
 
 \section*{CRediT Author Statement}
 \textbf{Xabier Olaz}: Conceptualization, Methodology, Software, Investigation, Writing -- original draft. \textbf{Daniel Alaez}: Software, Validation, Data curation. \textbf{Iker Go\~ni}: Software, Validation, Data curation. \textbf{Jes\'us Villadangos}: Supervision, Writing -- review \& editing, Project administration.
