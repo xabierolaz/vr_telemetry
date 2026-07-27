@@ -104,6 +104,13 @@ In the intended live deployment, the UAV streams semantic telemetry and autopilo
 
 \begin{figure}[t]
     \centering
+    \includegraphics[width=\linewidth]{figures/fig_visual_pipeline.png}
+\caption{Visual walkthrough of the pipeline of Figure~\ref{fig:pipeline-b-architecture} with the real validation assets. Zone A (onboard): the UAV detects the tower in a real flight frame (mAP50 0.982) and geometric localization converts the bounding box into an ENU world pose by intersecting the image ray with the ground using the camera model and the aircraft attitude (measured error 4.3~m against orthophoto ground truth; trajectory replay fidelity 0.24~m). Zone B (link): only per-object semantic packets travel the long-range link---no continuous video---at 615.8~kbps emitted (1.67~Mbps mission-normalized), 84.0\% and 70.4\% below H.264/H.265 encodings of the same flight. Zone C (ground): the snapshot service fuses the asynchronous detection and MAVLink streams into one canonical record polled at 5~Hz, Unreal Engine~5/Cesium spawns or updates the proxy actor in place ($\leq$50~ms), and the operator receives the stereo view through the Meta Quest~2 with detection-to-display latency of 38.2~ms mean and a bounded end-to-end update of about 188~ms mean / 503~ms p95.}
+    \label{fig:visual-pipeline}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
     \includegraphics[width=\linewidth]{figures/fig_e2e_pipeline.png}
 \caption{End-to-end semantic telemetry pipeline, from onboard detection to the VR operator. Each stage is annotated with its input, output, and the problem it solves; arrows carry the artifact that crosses each boundary (detections, the semantic packet over the degraded link, the 5~Hz snapshot, and the in-place actor update). Photos show the real assets of the validation: the onboard frame with the tower detection, the reconstructed proxy actor in the Unreal/Cesium twin, and the operator at the Meta Quest~2 workstation. The bottom band reports the measured budget: detection-to-display 38.2~ms mean (p95 252.9~ms), semantic telemetry at 615.8~kbps emitted (1.67~Mbps mission-normalized, 84.0\% and 70.4\% below H.264/H.265 encodings of the same flight), and a bounded end-to-end visible update of about 188~ms mean / 503~ms p95.}
     \label{fig:e2e-pipeline-panels}
