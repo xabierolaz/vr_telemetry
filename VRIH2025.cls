@@ -23,7 +23,10 @@
 %% check pdfTeX mode algorithm,
 
 %\RequirePackage{babel}
+\RequirePackage{iftex}
+\ifPDFTeX\else
 \RequirePackage{fontspec}
+\fi
 %\RequirePackage{xeCJK}
 %\RequirePackage{ctex}
 
@@ -42,7 +45,7 @@
 
 
 
-\setmainfont{Times New Roman}
+\ifPDFTeX\else\setmainfont{Times New Roman}\fi
 
 %\usepackage{bm}
 %\pdfstringdefDisableCommands{%
