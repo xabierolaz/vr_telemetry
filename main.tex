@@ -104,8 +104,8 @@ In the intended live deployment, the UAV streams semantic telemetry and autopilo
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{figures/comparativa.png}
-\caption{End-to-end flow of a tower detection. (1) Onboard frame with the YOLO tower bounding box; (2) the semantic state snapshot published by the ground-station service and polled by the Unreal component; (3) the reconstructed tower proxy actor placed in the Unreal/Cesium twin at the georeferenced position; (4) the operator inspecting the scene through the Meta Quest~2 headset. Panels (3) and (4) are shown as placeholders pending the final captures.}
+    \includegraphics[width=\linewidth]{figures/fig_e2e_pipeline.png}
+\caption{End-to-end semantic telemetry pipeline, from onboard detection to the VR operator. Each stage is annotated with its input, output, and the problem it solves; arrows carry the artifact that crosses each boundary (detections, the semantic packet over the degraded link, the 5~Hz snapshot, and the in-place actor update). Photos show the real assets of the validation: the onboard frame with the tower detection, the reconstructed proxy actor in the Unreal/Cesium twin, and the operator at the Meta Quest~2 workstation. The bottom band reports the measured budget: detection-to-display 38.2~ms mean (p95 252.9~ms), semantic telemetry at 615.8~kbps emitted (1.67~Mbps mission-normalized, 84.0\% and 70.4\% below H.264/H.265 encodings of the same flight), and a bounded end-to-end visible update of about 188~ms mean / 503~ms p95.}
     \label{fig:e2e-pipeline-panels}
 \end{figure}
 
