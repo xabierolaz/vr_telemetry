@@ -298,6 +298,17 @@ The twin aircraft was driven by the service-published world positions. Against t
     \label{fig:real-vs-map}
 \end{figure}
 
+\subsection{Synchronized Twin Correspondence}
+\label{sec:twin-sync}
+As a visual end-to-end check, the onboard video and the twin were replayed in sync and captured side by side over the full analysis segment. Figure~\ref{fig:twin-sync-validation} shows two instants: when the detector confirms a support, the semantic telemetry stream spawns the proxy actor at the georeferenced ENU pose and it persists for the rest of the flight. The correspondence claim is event-level and geospatial (spawn on confirmed detection, proxy at the measured ENU pose with the errors reported in Section~\ref{sec:trajectory-fidelity}); the twin render is driven by the reconstructed state, not by pixel matching against the onboard imagery, so viewpoint and terrain appearance differ from the real frames.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig_twin_sync_validation.png}
+\caption{Synchronized validation of the digital twin against the onboard real-flight video at two instants. (a,c) Onboard frames with the YOLO tower detection (bounding box and confidence). (b,d) The same mission timestamps in the Unreal/Cesium ground-station twin: the proxy actor (orange marker) has been spawned at the georeferenced ENU pose by the semantic telemetry stream once the detection is confirmed ($t\approx1.3$~s for the first support, $t\approx16$~s for the second) and persists for the rest of the flight.}
+    \label{fig:twin-sync-validation}
+\end{figure}
+
 \subsection{Desktop Render Performance}
 \label{sec:render-performance}
 To confirm that the desktop twin can host the Cesium geospatial prior together with the reconstructed semantic actors without becoming frame-bound, we measured the engine on the workstation listed in Table~\ref{tab:implementation-config} (AMD Ryzen~9 9950X, RTX~5090, 64~GB RAM). The benchmark replayed synthetic obstacle payloads through the same ingestion path used at runtime and reported per-phase frame time (p50/p95) together with estimated component, triangle, and draw-call counts.
