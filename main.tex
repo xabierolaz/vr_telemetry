@@ -46,7 +46,7 @@
 \address[1]{Mathematical Engineering and Computer Science Department, Public University of Navarre, Pamplona, Spain}
 \address[2]{Institute of Smart Cities, Public University of Navarre, Spain}
 
-\abstract{Virtual-reality headsets and intelligent hardware enable immersive operator interfaces for unmanned aerial vehicle (UAV) teleoperation. When the communication link is reliable, a live video feed may suffice; however, under variable link conditions—such as delay, reduced bandwidth, intermittent connectivity, or privacy constraints—the pilot can lose spatial awareness of terrain, obstacles, and mission-relevant objects. We present a VR-headset digital-twin visual pipeline in which an Unreal Engine / Cesium geospatial prior provides static scene context while an onboard detector sends semantic object-state updates that are reconstructed as time-stamped, uncertainty-aware actors visible to the pilot through a VR headset. The headset is not a passive monitor here: stereoscopic depth supports distance and approach judgments that degraded video erodes first, and head-tracked rendering decouples the operator's gaze from the camera gimbal, making the space around the aircraft inspectable beyond the camera's instantaneous field of view. The pipeline architecture—spanning detection ingestion, a state-snapshot service, Unreal/Cesium actor lifecycle, and headset visualization—allows the operator to inspect map-derived context, live detections, stale actors, and uncertainty encodings in a single immersive scene. We validate the complete chain on a real-flight replay: recorded UAV video ingested through a simulated per-frame link with ArduPilot telemetry synchronized by content, a fine-tuned detector (mAP50 0.982), and detected objects reconstructed in the twin as geometric proxy actors. The twin reproduced the logged trajectory within 0.24 m, and the reconstructed position of the validated power-line support fell 4.3 m from its orthophoto ground truth. Semantic telemetry carried the mission at 615.8 kbps as emitted (1.67 Mbps normalized), 84.0\% and 70.4\% below H.264 and H.265 encodings of the same video. Measured detection-to-display latency averaged 38.2 ms (p95 252.9 ms); a bounded display budget places end-to-end updates at about 188 ms mean and 503 ms p95. The display is presented as an auxiliary human-in-the-loop aid for pilot spatial awareness, not as certified detect-and-avoid or a replacement for regulatory safety channels.}
+\abstract{Virtual-reality headsets and intelligent hardware enable immersive operator interfaces for unmanned aerial vehicle (UAV) teleoperation. When the communication link is reliable, a live video feed may suffice; however, under variable link conditions—such as delay, reduced bandwidth, intermittent connectivity, or privacy constraints—the pilot can lose spatial awareness of terrain, obstacles, and mission-relevant objects. We present a VR-headset digital-twin visual pipeline in which an Unreal Engine / Cesium geospatial prior provides static scene context while an onboard detector sends semantic object-state updates that are reconstructed as time-stamped, uncertainty-aware actors visible to the pilot through a VR headset. The headset is not a passive monitor here: stereoscopic depth supports distance and approach judgments that degraded video erodes first, and head-tracked rendering decouples the operator's gaze from the camera gimbal, making the space around the aircraft inspectable beyond the camera's instantaneous field of view. The pipeline architecture—spanning detection ingestion, a state-snapshot service, Unreal/Cesium actor lifecycle, and headset visualization—allows the operator to inspect map-derived context, live detections, stale actors, and uncertainty encodings in a single immersive scene. We validate the complete chain on a real-flight replay: recorded UAV video ingested through a simulated per-frame link with ArduPilot telemetry synchronized by content, a fine-tuned detector (mAP50 0.982), and detected objects reconstructed in the twin as geometric proxy actors. The twin reproduced the logged trajectory within 0.24 m, and the reconstructed position of the validated power-line support fell 4.3 m from its orthophoto ground truth. Semantic telemetry carried the mission at 615.8 kbps as emitted (1.67 Mbps normalized), 84.0\% and 70.4\% below H.264 and H.265 encodings of the same video. Measured detection-to-display latency averaged 38.2 ms; a bounded display budget places end-to-end updates at about 188 ms mean. The display is presented as an auxiliary human-in-the-loop aid for pilot spatial awareness, not as certified detect-and-avoid or a replacement for regulatory safety channels.}
 
 \keywords{Virtual reality; Intelligent hardware; UAV; Digital twin; Geospatial scene reconstruction; Semantic telemetry; Teleoperation; Situational awareness}
 
@@ -75,6 +75,15 @@ The intended contributions are:
     \item A scene-state encoding designed for the VR medium rather than ported to it: map-derived, live, stale, and uncertain entities are distinct stereoscopic layers whose meaning is read through depth and head-tracked inspection (Section~\ref{sec:scene-state}). To our knowledge this is the first UAV operator display in which the HMD is the primary consumer of a semantic telemetry stream, making freshness and uncertainty spatially inspectable properties of the scene---a class of immersive display that a video feed cannot express regardless of its bitrate.
     \item Validating the complete chain through a real-flight replay, which provides measured semantic bandwidth reductions against H.264 and H.265 baselines, alongside sub-metre trajectory fidelity and orthophoto-referenced geospatial accuracy for reconstructed objects.
 \end{itemize}
+
+Figure~\ref{fig:twin-sync-validation} previews the end result of the complete chain. The left column shows the real onboard video of the validation flight with the tower detector running; the right column shows the same mission timestamps inside the Unreal/Cesium digital twin, where each confirmed detection has spawned a persistent proxy actor at its georeferenced world pose. The remainder of the paper describes the architecture and workflow that produce this correspondence, and then quantifies its bandwidth, latency, and geospatial accuracy.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig_twin_sync_validation.png}
+\caption{Synchronized validation of the digital twin against the onboard real-flight video at two instants. (a,c) Onboard frames with the YOLO tower detection (bounding box and confidence). (b,d) The same mission timestamps in the Unreal/Cesium ground-station twin: the proxy actor (orange marker) has been spawned at the georeferenced ENU pose by the semantic telemetry stream once the detection is confirmed ($t\approx1.3$~s for the first support, $t\approx16$~s for the second) and persists for the rest of the flight.}
+    \label{fig:twin-sync-validation}
+\end{figure}
 
 \section{Related Work and Positioning}
 
@@ -109,40 +118,13 @@ In the intended live deployment, the UAV streams semantic telemetry and autopilo
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{figures/fig_visual_pipeline.png}
-\caption{Visual walkthrough of the pipeline of Figure~\ref{fig:pipeline-b-architecture} with the real validation assets. Zone A (onboard): the UAV detects the tower in a real flight frame (mAP50 0.982) and geometric localization converts the bounding box into an ENU world pose by intersecting the image ray with the ground using the camera model and the aircraft attitude (measured error 4.3~m against orthophoto ground truth; trajectory replay fidelity 0.24~m). Zone B (link): only per-object semantic packets travel the long-range link---no continuous video---at 615.8~kbps emitted (1.67~Mbps mission-normalized), 84.0\% and 70.4\% below H.264/H.265 encodings of the same flight. Zone C (ground): the snapshot service fuses the asynchronous detection and MAVLink streams into one canonical record polled at 5~Hz, Unreal Engine~5/Cesium spawns or updates the proxy actor in place ($\leq$50~ms), and the operator receives the stereo view through the Meta Quest~2 with detection-to-display latency of 38.2~ms mean and a bounded end-to-end update of about 188~ms mean / 503~ms p95.}
-    \label{fig:visual-pipeline}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
     \includegraphics[width=\linewidth]{figures/fig_e2e_pipeline.png}
-\caption{End-to-end semantic telemetry pipeline, from onboard detection to the VR operator. Each stage is annotated with its input, output, and the problem it solves; arrows carry the artifact that crosses each boundary (detections, the semantic packet over the degraded link, the 5~Hz snapshot, and the in-place actor update). Photos show the real assets of the validation: the onboard frame with the tower detection, the reconstructed proxy actor in the Unreal/Cesium twin, and the operator at the Meta Quest~2 workstation. The bottom band reports the measured budget: detection-to-display 38.2~ms mean (p95 252.9~ms), semantic telemetry at 615.8~kbps emitted (1.67~Mbps mission-normalized, 84.0\% and 70.4\% below H.264/H.265 encodings of the same flight), and a bounded end-to-end visible update of about 188~ms mean / 503~ms p95.}
+\caption{End-to-end semantic telemetry workflow with the real validation assets, from onboard detection to the VR operator. Zone A (onboard): the UAV detects the tower in a real flight frame (mAP50 0.982) and geometric localization converts the bounding box into an ENU world pose by intersecting the image ray with the ground using the camera model and the aircraft attitude (measured error 4.3~m against orthophoto ground truth; trajectory replay fidelity 0.24~m). Zone B (link): only per-object semantic packets travel the long-range link---no continuous video---at 615.8~kbps emitted (1.67~Mbps mission-normalized), 84.0\% and 70.4\% below H.264/H.265 encodings of the same flight. Zone C (ground): the snapshot service fuses the asynchronous detection and MAVLink streams into one canonical record polled at 5~Hz, Unreal Engine~5/Cesium spawns or updates the proxy actor in place ($\leq$50~ms), and the operator receives the stereo view through the Meta Quest~2 with detection-to-display latency of 38.2~ms mean and a bounded end-to-end update of about 188~ms mean.}
     \label{fig:e2e-pipeline-panels}
 \end{figure}
 
 \subsection{Implementation Workflow}
-The runtime distinguishes a one-time static-context setup from a continuous dynamic-update loop. Unreal and Cesium initialize the map-derived scene prior once, after which the system enters a publish--normalize--poll cycle: the detection source emits each new observation; the ground-station service normalizes source identity, class, confidence, timestamp, uncertainty, and position into a canonical entity record; and the Unreal telemetry component polls that snapshot at 5~Hz to reconcile the state with the live scene. On every poll, the component spawns newly confirmed actors, updates the pose of tracked ones, demotes those whose age exceeds the configured staleness threshold, and despawns actors whose tracks have expired. This design keeps the heavy geospatial prior on the ground station while the downlink to the operator carries only the semantic delta, which is the basis of the bandwidth advantage reported in Section~\ref{sec:results}.
-
-\begin{table}[H]
-\centering
-\small
-\caption{VR-Headset Visual Pipeline data flow.}
-\label{tab:pipeline-b-runtime}
-\begin{tabular}{@{}L{0.22\linewidth}L{0.30\linewidth}L{0.34\linewidth}@{}}
-\toprule
-Stage & Producer & Consumer and required evidence \\
-\midrule
-Static scene prior & Unreal/Cesium, 3D-tile source & VR-headset runtime; map origin recorded \\
-Semantic-state production & YOLOE-26s base (mAP50 0.982) & Telemetry encoder \\
-Estimated georeferencing & UAV pose, camera model, terrain & Detection message; mount validated by orthophoto overlay \\
-State publication & Ground-station service & Unreal component; 5~Hz polling \\
-Actor reconstruction & Unreal component & VR operator display; spawn/update/despawn lifecycle verified \\
-Immersive display & Unreal/Cesium runtime & Target HMD: Meta Quest 2 and Quest 3 (informally demonstrated, not formally validated); desktop twin used for this replay \\
-\bottomrule
-\end{tabular}
-\normalsize
-\end{table}
+The runtime distinguishes a one-time static-context setup from a continuous dynamic-update loop, following the three zones of Figure~\ref{fig:e2e-pipeline-panels}. Unreal and Cesium initialize the map-derived scene prior once, after which the system enters a publish--normalize--poll cycle: the detection source emits each new observation; the ground-station service normalizes source identity, class, confidence, timestamp, uncertainty, and position into a canonical entity record; and the Unreal telemetry component polls that snapshot at 5~Hz to reconcile the state with the live scene. On every poll, the component spawns newly confirmed actors, updates the pose of tracked ones, demotes those whose age exceeds the configured staleness threshold, and despawns actors whose tracks have expired. This design keeps the heavy geospatial prior on the ground station while the downlink to the operator carries only the semantic delta, which is the basis of the bandwidth advantage reported in Section~\ref{sec:results}.
 
 \begin{table}[H]
 \centering
@@ -177,35 +159,9 @@ The display actor lifecycle is: \text{new} $\rightarrow$ \text{confirmed} $\righ
 
 \subsection{Network Interface and Message Contract}
 \label{sec:message-contract}
-Unreal does not ingest the raw autopilot stream or the raw detector output. A ground-station service normalizes these two asynchronous sources into a single polled snapshot. The detector publishes detections over a local ingestion interface; the autopilot supplies aircraft state over its telemetry link. The service fuses both, resolves a stable per-object identity, and exposes the operator-display state as a snapshot that the Unreal telemetry component polls at 5~Hz. Each snapshot carries two top-level blocks: a \code{telemetry} object for the UAV and an \code{obstacles[]} array for the reconstructed entities. Table~\ref{tab:message-contract} lists the fields that drive the display; the position is carried both as WGS84 latitude/longitude and as a local ENU \code{world\_m} triple relative to a recorded home origin, and the Unreal component prioritizes \code{world\_m} when present.
+Unreal does not ingest the raw autopilot stream or the raw detector output. A ground-station service normalizes these two asynchronous sources into a single polled snapshot. The detector publishes detections over a local ingestion interface; the autopilot supplies aircraft state over its telemetry link. The service fuses both, resolves a stable per-object identity, and exposes the operator-display state as a snapshot that the Unreal telemetry component polls at 5~Hz. Each snapshot carries two top-level blocks: a \code{telemetry} object for the UAV and an \code{obstacles[]} array for the reconstructed entities. The position is carried both as WGS84 latitude/longitude and as a local ENU \code{world\_m} triple relative to a recorded home origin, and the Unreal component prioritizes \code{world\_m} when present.
 
-\begin{table}[H]
-\centering
-\small
-\caption{Fields of the state snapshot consumed by the Unreal telemetry component.}
-\label{tab:message-contract}
-\begin{tabular}{@{}L{0.22\linewidth}L{0.18\linewidth}L{0.48\linewidth}@{}}
-\toprule
-Block / field & Type & Role in the display \\
-\midrule
-\multicolumn{3}{@{}l}{\textit{telemetry} (UAV state, one per snapshot)} \\
-\quad \code{lat}, \code{lon}, \code{alt}, \code{rel\_alt} & float & Geodetic position of the aircraft \\
-\quad \code{world\_m.\{north,east,up\}} & float & Local ENU position relative to home; preferred by Unreal \\
-\quad \code{yaw}, \code{heading} & deg & Aircraft heading (used for actor orientation) \\
-\quad \code{mode}, \code{armed}, \code{groundspeed} & mixed & Flight-mode, arm state, and ground speed context \\
-\midrule
-\multicolumn{3}{@{}l}{\textit{obstacles[i]} (reconstructed entity, one per detected object)} \\
-\quad \code{entity\_id}, \code{object\_id} & string & Stable identity for spawn/update/despawn lifecycle \\
-\quad \code{type}, \code{object\_type} & string & Canonical class label (e.g.\ \textit{tower}, \textit{cow}, \textit{bike}) \\
-\quad \code{world\_m.\{north,east,up\}} & float & Local ENU position; preferred by Unreal when present \\
-\quad \code{lat}, \code{lon} & float & Geodetic fallback for position \\
-\quad \code{confidence} & 0--1 & Detection confidence; drives confirmed/stale demotion \\
-\quad \code{yaw\_deg}, \code{heading\_deg} & deg & Optional object heading \\
-\quad \code{track\_age\_s}, \code{track\_seen\_count}, \code{track\_static} & mixed & Freshness and static/dynamic track metadata (TTL selection) \\
-\bottomrule
-\end{tabular}
-\normalsize
-\end{table}
+The \code{telemetry} block carries the geodetic position of the aircraft (\code{lat}, \code{lon}, \code{alt}, \code{rel\_alt}), its local ENU position relative to home (\code{world\_m.\{north,east,up\}}, preferred by Unreal), the aircraft heading used for actor orientation (\code{yaw}, \code{heading}), and flight-mode, arm-state, and ground-speed context (\code{mode}, \code{armed}, \code{groundspeed}). Each entry of \code{obstacles[]} carries a stable identity for the spawn/update/despawn lifecycle (\code{entity\_id}, \code{object\_id}), a canonical class label such as \textit{tower}, \textit{cow}, or \textit{bike} (\code{type}, \code{object\_type}), the local ENU position with geodetic fallback (\code{world\_m}, \code{lat}/\code{lon}), the detection confidence that drives confirmed/stale demotion, an optional object heading (\code{yaw\_deg}, \code{heading\_deg}), and track freshness and static/dynamic metadata used for TTL selection (\code{track\_age\_s}, \code{track\_seen\_count}, \code{track\_static}).
 
 \section{Method}
 
@@ -223,11 +179,11 @@ The layered state of Section~\ref{sec:scene-state} is only useful if the operato
 
 \subsection{Detection-to-World Projection}
 \label{sec:detection-to-world}
-The georeferencing step converts one bounding box into one world position under explicit camera, pose, and terrain assumptions (Figure~\ref{fig:visual-pipeline}, zone~A). The detector returns a box \(b=[x_1,y_1,x_2,y_2]^T\); because the objects of interest rest on the ground, the contact evidence is the bottom-centre pixel of the box,
+The georeferencing step converts one bounding box into one world position under explicit camera, pose, and terrain assumptions (Figure~\ref{fig:e2e-pipeline-panels}, zone~A). The detector returns a box \(b=[x_1,y_1,x_2,y_2]^T\); because the objects of interest rest on the ground, the contact evidence is the bottom-centre pixel of the box,
 \begin{equation}
 z_b = \begin{bmatrix} u_b \\ v_b \end{bmatrix} = \begin{bmatrix} (x_1+x_2)/2 \\ y_2 \end{bmatrix},
 \end{equation}
-which is the pixel least sensitive to box width noise and to the object's visible extent above the ground plane. Under a pinhole model with image size \(W\times H\) and calibrated vertical field of view \(\psi_v\), \(z_b\) maps to a unit ray in the camera frame; the ray is then rotated into the UAV body frame using the known camera mount, and into local North--East--Down (NED) using the attitude (yaw, pitch, roll) logged by the autopilot. The mount and attitude terms are what place the ray off-nadir in Figure~\ref{fig:visual-pipeline}: the estimate never assumes the camera points straight down. With NED down positive and the ray \(\hat r_n=[r_{n,N}, r_{n,E}, r_{n,D}]^T\), intersection with the local ground plane at UAV height \(h\) (AGL) gives
+which is the pixel least sensitive to box width noise and to the object's visible extent above the ground plane. Under a pinhole model with image size \(W\times H\) and calibrated vertical field of view \(\psi_v\), \(z_b\) maps to a unit ray in the camera frame; the ray is then rotated into the UAV body frame using the known camera mount, and into local North--East--Down (NED) using the attitude (yaw, pitch, roll) logged by the autopilot. The mount and attitude terms are what place the ray off-nadir in Figure~\ref{fig:e2e-pipeline-panels}: the estimate never assumes the camera points straight down. With NED down positive and the ray \(\hat r_n=[r_{n,N}, r_{n,E}, r_{n,D}]^T\), intersection with the local ground plane at UAV height \(h\) (AGL) gives
 \begin{equation}
 t_b = \frac{h}{r_{n,D}}, \quad N=t_b r_{n,N}, \quad E=t_b r_{n,E}, \quad d_h=\sqrt{N^2+E^2},
 \end{equation}
@@ -251,14 +207,7 @@ The software-only segments can be instrumented immediately. The complete source-
 \label{sec:results}
 
 \subsection{Replay Setup and Synchronization}
-The validation uses a recorded power-line inspection flight (M\_20\_1RR) operated by FuVeX Civil S.L. The onboard video was processed into an analysis segment (1280$\times$960, 10~fps) and synchronized to the autopilot log by content matching against the recorded frames. A tower detector fine-tuned from a YOLOE-26s base reaches mAP50 0.982. Detected supports are georeferenced, tracked by the ground-station service, and reconstructed as proxy actors.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.82\linewidth]{figures/fig_detection_grid.png}
-\caption{Detector output on four recorded frames of the real-flight segment.}
-    \label{fig:detection-grid}
-\end{figure}
+The validation uses a recorded power-line inspection flight (M\_20\_1RR) operated by FuVeX Civil S.L. The onboard video was processed into an analysis segment (1280$\times$960, 10~fps) and synchronized to the autopilot log by content matching against the recorded frames. A tower detector fine-tuned from a YOLOE-26s base reaches mAP50 0.982. Detected supports are georeferenced, tracked by the ground-station service, and reconstructed as proxy actors. The detection output and its synchronized reconstruction in the twin are shown side by side in Figure~\ref{fig:twin-sync-validation}.
 
 \subsection{Semantic Bandwidth versus Video Baselines}
 Over the replayed mission, the detector published 554 obstacle messages totalling 14.46~MB. Normalized to the 69.2~s mission interval, the stream corresponds to 1.67~Mbps. Baselines were encoded from the same flight video: H.264 at 10.43~Mbps and H.265 at 5.65~Mbps. The mission-normalized reduction is 84.0\% against H.264 and 70.4\% against H.265. These figures exclude Cesium tile traffic, as the operating region was pre-cached.
@@ -271,7 +220,7 @@ Over the replayed mission, the detector published 554 obstacle messages totallin
 \end{figure}
 
 \subsection{Latency}
-The measured detection-to-display latency averages 38.2~ms with a p95 of 252.9~ms. Adding a conservative display budget for the remaining software segments (5~Hz poll and 50~ms actor spawn/render) bounds the end-to-end update latency at about 188~ms mean and 503~ms p95 for a visible proxy update in the desktop twin. This figure excludes HMD presentation latency.
+The measured detection-to-display latency averages 38.2~ms. Adding a conservative display budget for the remaining software segments (5~Hz poll and 50~ms actor spawn/render) bounds the end-to-end update latency at about 188~ms mean for a visible proxy update in the desktop twin. This figure excludes HMD presentation latency.
 
 \begin{figure}[t]
     \centering
@@ -284,57 +233,19 @@ The measured detection-to-display latency averages 38.2~ms with a p95 of 252.9~m
 \label{sec:trajectory-fidelity}
 The twin aircraft was driven by the service-published world positions. Against the reference trajectory, the commanded path shows a cross-track error of 0.24~m maximum ($n=2363$). Ground truth for power-line supports was marked on PNOA orthophotos. A robust cluster analysis places the main cluster (216 observations, support P3) at 4.3~m from its orthophoto position; the end-to-end georeferencing error is approximately 4--5~m for the validated support at 40--130~m range. Residual error sources: camera-mount residual (2--8~m) and video--log synchronization (8--12~m along track).
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\linewidth]{figures/fig_trajectory_check.png}
-\caption{Trajectory fidelity: reference path, service-commanded positions, and Unreal readback.}
-    \label{fig:trajectory-check}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\linewidth]{figures/fig_real_vs_map.png}
-\caption{Real detection and geospatial validation against PNOA orthophoto ground truth.}
-    \label{fig:real-vs-map}
-\end{figure}
-
 \subsection{Synchronized Twin Correspondence}
 \label{sec:twin-sync}
 As a visual end-to-end check, the onboard video and the twin were replayed in sync and captured side by side over the full analysis segment. Figure~\ref{fig:twin-sync-validation} shows two instants: when the detector confirms a support, the semantic telemetry stream spawns the proxy actor at the georeferenced ENU pose and it persists for the rest of the flight. The correspondence claim is event-level and geospatial (spawn on confirmed detection, proxy at the measured ENU pose with the errors reported in Section~\ref{sec:trajectory-fidelity}); the twin render is driven by the reconstructed state, not by pixel matching against the onboard imagery, so viewpoint and terrain appearance differ from the real frames.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\linewidth]{figures/fig_twin_sync_validation.png}
-\caption{Synchronized validation of the digital twin against the onboard real-flight video at two instants. (a,c) Onboard frames with the YOLO tower detection (bounding box and confidence). (b,d) The same mission timestamps in the Unreal/Cesium ground-station twin: the proxy actor (orange marker) has been spawned at the georeferenced ENU pose by the semantic telemetry stream once the detection is confirmed ($t\approx1.3$~s for the first support, $t\approx16$~s for the second) and persists for the rest of the flight.}
-    \label{fig:twin-sync-validation}
-\end{figure}
-
 \subsection{Desktop Render Performance}
 \label{sec:render-performance}
-To confirm that the desktop twin can host the Cesium geospatial prior together with the reconstructed semantic actors without becoming frame-bound, we measured the engine on the workstation listed in Table~\ref{tab:implementation-config} (AMD Ryzen~9 9950X, RTX~5090, 64~GB RAM). The benchmark replayed synthetic obstacle payloads through the same ingestion path used at runtime and reported per-phase frame time (p50/p95) together with estimated component, triangle, and draw-call counts.
+To confirm that the desktop twin can host the Cesium geospatial prior together with the reconstructed semantic actors without becoming frame-bound, we measured the engine on the workstation listed in Table~\ref{tab:implementation-config} (AMD Ryzen~9 9950X, RTX~5090, 64~GB RAM). The benchmark replayed synthetic obstacle payloads through the same ingestion path used at runtime and reported per-phase frame time together with estimated component, triangle, and draw-call counts.
 
-Across the measured scene sizes, the create, pose-stream, and shape-stream phases stayed below a 33.3~ms (30~FPS) p95 budget up to 100 reconstructed semantic-proxy actors, while the Unreal CSV profiler reported a global \code{GPUTime} p50/p95 of 1.46/1.67~ms and \code{FrameTime} p50/p95 of 4.66/6.32~ms on the lighter global workload. Table~\ref{tab:render-performance} summarizes the per-phase frame time of the actor-level semantic-proxy backend. The 100-object pose- and shape-update streams exceeded a 16.7~ms (60~FPS) p95 budget (17.8~ms and 19.3~ms respectively), which bounds the dense-scene update rate but leaves single-frame rendering headroom on this hardware. These measurements are non-stereoscopic desktop measurements; they establish a smooth desktop baseline for the geospatial prior and dynamic actors and do not constitute VR-headset frame-rate validation.
+Across the measured scene sizes (10, 50, and 100 reconstructed semantic-proxy actors), the create, pose-stream, and shape-stream phases stayed within a 33.3~ms (30~FPS) frame-time budget, with per-phase frame times ranging from about 4.4~ms at 10 actors to about 19.3~ms for the heaviest 100-actor shape-update stream, and scene complexity growing to 432 components / 432 draw calls and roughly 209k triangles at 100 actors. On the lighter global workload, the Unreal CSV profiler reported a global \code{GPUTime} median of 1.46~ms and \code{FrameTime} median of 4.66~ms. The 100-object pose- and shape-update streams exceed a 16.7~ms (60~FPS) budget, which bounds the dense-scene update rate but leaves single-frame rendering headroom on this hardware. These measurements are non-stereoscopic desktop measurements; they establish a smooth desktop baseline for the geospatial prior and dynamic actors and do not constitute VR-headset frame-rate validation.
 
 \subsection{Stereoscopic Rendering Path and HMD Frame Budget}
 \label{sec:hmd-budget}
-The immersive display is served by the same Unreal scene through the engine's OpenXR stereoscopic path: one scene update produces both eye views, so the semantic-actor lifecycle measured above is shared between eyes and the only additional cost over the desktop baseline is the second view's rasterization and the compositor stage. Against the Meta Quest~2 90~Hz reference budget of 11.1~ms per frame (Table~\ref{tab:implementation-config}), the measured global frame time of the desktop scene (p50/p95 4.66/6.32~ms, with \code{GPUTime} 1.46/1.67~ms) leaves a factor of about two of headroom: even under a conservative assumption that the stereo pair doubles the render cost, the projected p95 stays within the 90~Hz budget, and within the 72~Hz budget (13.9~ms) with wider margin. This is an analytic bound derived from the desktop profile, not a headset measurement---HMD presentation latency, sustained stereoscopic frame rate under thermal limits, and source-to-photon delay are not covered by it---but it removes the engine cost as a plausible blocker for the headset deployment and narrows the open HMD questions to the compositor and the human factors study (Section~\ref{sec:hmd-feasibility}).
-
-\begin{table}[H]
-\centering
-\small
-\caption{Desktop render benchmark, semantic-proxy backend, frame-time p95 in milliseconds (Unreal 5.7, RTX~5090).}
-\label{tab:render-performance}
-\begin{tabular}{@{}L{0.12\linewidth}L{0.12\linewidth}L{0.12\linewidth}L{0.12\linewidth}L{0.14\linewidth}L{0.10\linewidth}@{}}
-\toprule
-Actors & Create p95 & Pose p95 & Shape p95 & Components / draw calls & Est. triangles \\
-\midrule
-10  & 4.67 & 4.38 & 4.75 & 44 / 44 & 23\,760 \\
-50  & 5.13 & 9.27 & 9.88 & 216 / 216 & 104\,432 \\
-100 & 4.82 & 17.81 & 19.26 & 432 / 432 & 208\,864 \\
-\bottomrule
-\end{tabular}
-\normalsize
-\end{table}
+The immersive display is served by the same Unreal scene through the engine's OpenXR stereoscopic path: one scene update produces both eye views, so the semantic-actor lifecycle measured above is shared between eyes and the only additional cost over the desktop baseline is the second view's rasterization and the compositor stage. Against the Meta Quest~2 90~Hz reference budget of 11.1~ms per frame (Table~\ref{tab:implementation-config}), the measured global frame time of the desktop scene (median 4.66~ms, with \code{GPUTime} median 1.46~ms) leaves a factor of about two of headroom: even under a conservative assumption that the stereo pair doubles the render cost, the projected frame time stays within the 90~Hz budget, and within the 72~Hz budget (13.9~ms) with wider margin. This is an analytic bound derived from the desktop profile, not a headset measurement---HMD presentation latency, sustained stereoscopic frame rate under thermal limits, and source-to-photon delay are not covered by it---but it removes the engine cost as a plausible blocker for the headset deployment and narrows the open HMD questions to the compositor and the human factors study (Section~\ref{sec:hmd-feasibility}).
 
 \subsection{Degradation Profiles}
 Network degradation was simulated using loss and jitter profiles: visible-entity recall was 0.949 under 5\% loss with 50~ms jitter and 0.843 under 15\% loss with 200~ms jitter. The actor lifecycle behaved as specified: proxy actors spawn on detection, persist through tracked updates, are demoted when stale, and despawn on track expiry.
@@ -350,7 +261,7 @@ The VR-Headset Visual Pipeline can mislead an operator if uncertainty is hidden,
 
 The communication advantage itself rests on a pre-cached operating region, since streaming geospatial tiles over the same constrained link would erode the bandwidth reduction. The immersive interface additionally inherits the human-factor risks common to VR, including cybersickness, attentional tunneling, fatigue, and display occlusion. From a regulatory standpoint, Beyond Visual Line of Sight operation requires certified detect-and-avoid and command-and-control reliability that an auxiliary display of this kind cannot provide.
 
-The validation reported here is deliberately bounded: it covers a single flight, a single scenario, a single object class, and a simulated local link, so generalization will require additional flights and real radio measurements. Real-time onboard performance is likewise not established; the separate non-stereoscopic desktop render benchmark (Section~\ref{sec:render-performance}) confirms only that the engine hosts the geospatial prior and up to 100 reconstructed actors below a 30~FPS p95 frame budget, which is not VR-headset frame-rate evidence.
+The validation reported here is deliberately bounded: it covers a single flight, a single scenario, a single object class, and a simulated local link, so generalization will require additional flights and real radio measurements. Real-time onboard performance is likewise not established; the separate non-stereoscopic desktop render benchmark (Section~\ref{sec:render-performance}) confirms only that the engine hosts the geospatial prior and up to 100 reconstructed actors within a 30~FPS frame budget, which is not VR-headset frame-rate evidence.
 
 The safety envelope operationalizes these constraints through bounded stale-object age (a track TTL of 30~s for static entities and 4~s for dynamic ones), a maximum position-uncertainty radius, a minimum detection confidence, fallback rules that visually demote actors on staleness and despawn them on expiry, and an explicit prohibition against using the display as a certified detect-and-avoid channel.
 
@@ -423,7 +334,7 @@ Ahmed I, Ahmad M, Jeon G. Integrating digital twins and deep learning for medica
 Jones D, Snider C, Nassehi A, et al. Characterising the digital twin: A systematic literature review. CIRP Journal of Manufacturing Science and Technology, 2020, 29: 36--52. doi: \url{https://doi.org/10.1016/j.cirpj.2020.02.002}
 
 \bibitem{barricelli2019dt}
-Barricelli B R, Casiraghi E, Fogli D. A survey on digital twin: Definitions, characteristics, applications, and design implications. IEEE Access, 2019, 7: 167653--167671. doi: \url{https://doi.org/10.1109/ACCESS.2019.2953499}
+Barricelli B R, Casiraghi E, Fogli D. Digital twin: Definitions, characteristics, applications, and design implications. IEEE Access, 2019, 7: 167653--167671. doi: \url{https://doi.org/10.1109/ACCESS.2019.2953499}
 
 \bibitem{singh2021dt}
 Singh M, Fuenmayor E, Hinchy E, et al. Digital twin: Origin to future. Applied System Innovation, 2021, 4(2): 36. doi: \url{https://doi.org/10.3390/asi4020036}
