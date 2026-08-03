@@ -12,6 +12,12 @@ Side-by-side: real flight with YOLO detections (left) vs. the Unreal Engine / Ce
 
 ▶️ Full-quality video (24 s, 2560×960): [`media/side_by_side_twin.mp4`](media/side_by_side_twin.mp4)
 
+Moving-obstacle evasion: a cyclist peloton crosses the inspection corridor in the digital twin; the onboard YOLO front-end tracks the riders and the PORCE local replanner executes a bounded bypass before rejoining the nominal route (annotated onboard view with detection boxes and planner state):
+
+![Cyclist peloton evasion in the digital twin (YOLO + PORCE replanner)](media/vision_yolo_peloton_road_preview.gif)
+
+▶️ Full-quality video (23 s, 1280×960): [`media/vision_yolo_peloton_road_FINAL.mp4`](media/vision_yolo_peloton_road_FINAL.mp4)
+
 ## TL;DR
 
 Instead of streaming video, the aircraft downlinks per-object semantic telemetry (detector tags, tracks, footprints, aircraft pose) at kilobyte scale; the ground station reconstructs and displays the scene inside the twin. The paper reports the end-to-end pipeline, the bandwidth/latency characterization, and a real-flight validation with a YOLO-based perception front-end.
@@ -24,6 +30,7 @@ Instead of streaming video, the aircraft downlinks per-object semantic telemetry
 
 - **Real-flight video:** `video_final.mp4` in the [Resources release](../../releases/tag/resources) — onboard recording of the validation flight used in the paper, with synchronized telemetry (`video_final_gps.csv`, `video_final_sync.json` included in the same release).
 - **Side-by-side demo video:** [`media/side_by_side_twin.mp4`](media/side_by_side_twin.mp4) — real flight with YOLO detections next to the synchronized digital-twin reconstruction (see GIF preview above).
+- **Cyclist peloton evasion video:** [`media/vision_yolo_peloton_road_FINAL.mp4`](media/vision_yolo_peloton_road_FINAL.mp4) — moving-obstacle campaign in the digital twin: the peloton is detected and tracked onboard and the PORCE local replanner flies a bounded bypass before rejoining the inspection corridor (see GIF preview above).
 
 ## Citation
 
