@@ -11,7 +11,7 @@
 
 \LoadClass[twoside]{article}%twocolumn,
 %% math packages
-%\usepackage[fleqn]{amsmath}¹«Ê½×ó±ßÆë
+%\usepackage[fleqn]{amsmath}ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½
 %\setlength{\mathindent}{0cm}
 
 
@@ -33,10 +33,10 @@
 \RequirePackage{ifpdf}
 \RequirePackage{fancyhdr,lastpage}
 
-\usepackage{placeins} %%(11ÔÂ×¢ÊÍ£ºÍ¼±í¸¡¶¯ºê°ü)
+\usepackage{placeins} %%(11ï¿½ï¿½×¢ï¿½Í£ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 \usepackage{threeparttable}
-\usepackage{floatflt}%floatfltÌá¹©ÁË floatingfigure ºÍ floatingtable Á½¸ö»·¾³,¿É½«¸¡¶¯Í¼ÐÎ»ò±í¸ñ·ÅÖÃÓÚÎÄ×Ö¶ÎÂäµÄÅÔ±ß
-\usepackage{rotating}% sidewayfigure ºÍ sidewaystable »·¾³À´Ê¹Í¼ÐÎ»ò±í¸ñºáÅÅ%rotcaption
+\usepackage{floatflt}%floatfltï¿½á¹©ï¿½ï¿½ floatingfigure ï¿½ï¿½ floatingtable ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½É½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½
+\usepackage{rotating}% sidewayfigure ï¿½ï¿½ sidewaystable ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹Í¼ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%rotcaption
 
 %\RequirePackage[citebordercolor={1 1 1},linkbordercolor={1 1 1},menubordercolor={1 1 1},pagebordercolor={1 1 1},urlbordercolor={1 1 1}]{hyperref}
 %\RequirePackage[hyperindex=true,pdfstartview=FitH,breakline=true,CJKbookmarks=blue,bookmarksnumbered=blue,bookmarksopen=blue,colorlinks,pdfborder=001,linkcolor=blue,anchorcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
@@ -54,19 +54,19 @@
 %}
 %dvipdfm,dvi×ªPDF
 %\RequirePackage{breakurl,url}
-\urlstyle{same}%¶¨Òåurl×ÖÌåºÍÕýÎÄÏàÍ¬
-\RequirePackage{cuted,flushend}%Ë«À¸Çé¿öÊ¹ÓÃµÄÍ¨À¸±êÌâºÍÄ©Î²¶ÔÆë
+\urlstyle{same}%ï¿½ï¿½ï¿½ï¿½urlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬
+\RequirePackage{cuted,flushend}%Ë«ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä©Î²ï¿½ï¿½ï¿½ï¿½
 \usepackage{balance}
 \usepackage{titletoc}
 \usepackage{stfloats}
 %\usepackage[round]{natbib}
 \usepackage{changepage}
 %-------------------------- Page layout ------------------------------
-\paperwidth 21 true cm                  % Ö½ÕÅ¿í
-\paperheight 28.5 true cm                 % Ö½ÕÅ¸ß
+\paperwidth 21 true cm                  % Ö½ï¿½Å¿ï¿½
+\paperheight 28.5 true cm                 % Ö½ï¿½Å¸ï¿½
 
-\textwidth=162truemm% ÕýÎÄ¿í
-\textheight=230truemm% ÕýÎÄ¸ß
+\textwidth=162truemm% ï¿½ï¿½ï¿½Ä¿ï¿½
+\textheight=230truemm% ï¿½ï¿½ï¿½Ä¸ï¿½
 \topmargin=-23pt
 \headsep=5.5truemm
 \oddsidemargin=-4pt
@@ -208,7 +208,7 @@
 
 \put(-2,-648){
             \parbox[t]{158truemm}{\renewcommand{\baselinestretch}{.6}\vspace{4.5mm}\qihao Peer review under the responsibility of Beijing Zhongke Journal Publishing Co. Ltd.\\ \@copyright Beijing Zhongke Journal Publishing Co. Ltd., Publishing services by Elsevier B.V. on behalf of KeAi Communication Co. Ltd. This is
-an open access article under the CC BY-NC-ND license (http://creativecommons.org/licenses/by/4.0/).}}
+an open access article under the CC BY-NC-ND license (http://creativecommons.org/licenses/by-nc-nd/4.0/).}}
 
   \end{picture}
   
@@ -308,7 +308,7 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 \def\@addressline#1#2{
   \@addresscr
   \if\relax\detokenize{#1}\relax
-   \hb@xt@1ex{\hss}#2% ÎÞ±àºÅµÄÇé¿ö
+   \hb@xt@1ex{\hss}#2% ï¿½Þ±ï¿½Åµï¿½ï¿½ï¿½ï¿½
   \else
     \hb@xt@1ex{\textrm{\rm#1.}\hss}\hspace{0.7em}#2
   \fi
@@ -333,15 +333,15 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 \let\footnote\thanks
 \def\@makefnmark{\hbox{\@textsuperscript{\normalfont\@thefnmark}}}%
 \long\def\@makefntext##1{\noindent\@textsuperscript{\normalfont\@thefnmark}##1}%
-\@maketitle%Ê×Ò³Í¨À¸½Å×¢
-%\begin{strip}\@maketitle\end{strip}Ê×Ò³µ¥À¸½Å×¢
+\@maketitle%ï¿½ï¿½Ò³Í¨ï¿½ï¿½ï¿½ï¿½×¢
+%\begin{strip}\@maketitle\end{strip}ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢
 \@thanks%\thispagestyle{empty}
 \long\def\@makefntext##1{\noindent##1}%
 \@foundation
 \endgroup
 \renewcommand\thefootnote{\arabic{footnote}}
 \setcounter{footnote}{0}
-\pdfbookmark[0]{\@title}{anchor}%±êÌâÊéÇ©
+\pdfbookmark[0]{\@title}{anchor}%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©
 
 
 \setlength{\textwidth}{162cm}
@@ -381,7 +381,7 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 
 
 
-%\renewcommand\theequation{{\arabic{equation}}}%¹«Ê½ÑÕÉ«black
+%\renewcommand\theequation{{\arabic{equation}}}%ï¿½ï¿½Ê½ï¿½ï¿½É«black
 %\@addtoreset{equation}{section}
 
 
@@ -539,7 +539,7 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
           \scriptsize
           \begin{tabular}{lp{0.8\textwidth}}
         \hline\vspace*{-2.5mm}\\
-                       \qihao\noindent{\bf Citation:}\!\!\!\!& \qihao\@AuthorCitation. \@titlecitation. \@journal, \@Year, \@Vol(\@No): \thepage--\pageref{LastPage}. 
+                       \qihao\noindent{\bf Citation:}\!\!\!\!& \qihao\@AuthorCitation. \@titlecitation. \@journal\ifx\@Year\empty\else, \@Year, \@Vol(\@No)\fi: \thepage--\pageref{LastPage}. 
         \vspace{1mm}\\                                   %\makeatletter {\url{https://doi.org/\@DOI}}\makeatother
         \hline
     \end{tabular}}
@@ -596,13 +596,13 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 %            \fi
 %            {~~~~\@Month ~(\@Year) ~~Vol.~\@Vol ~~ No.~\@No~}}
 %\rhead{}
-%\fancyhead[R]{\textsf{\jiuhao\thepage}e} % µ¥Ò³£¨ÆæÊýÒ³£©Ò³ÂëÔÚÓÒÏÂ
+%\fancyhead[R]{\textsf{\jiuhao\thepage}e} % ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 %\fancyhead[L]{\textsf{\jiuhao\thepage}}
 %\lfoot{}
 %\cfoot{}
-%%\rfoot{\thepage\ of \pageref{LastPage}}%µ±Ç°Ò³ of ×ÜÒ³Êý
-%\renewcommand{\headrulewidth}{0.0pt}%¸ÄÎª0pt¼´¿ÉÈ¥µôÒ³Ã¼ÏÂÃæµÄºáÏß
-%\renewcommand{\footrulewidth}{0.0pt}%¸ÄÎª0pt¼´¿ÉÈ¥µôÒ³½ÅÉÏÃæµÄºáÏß
+%%\rfoot{\thepage\ of \pageref{LastPage}}%ï¿½ï¿½Ç°Ò³ of ï¿½ï¿½Ò³ï¿½ï¿½
+%\renewcommand{\headrulewidth}{0.0pt}%ï¿½ï¿½Îª0ptï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½Ò³Ã¼ï¿½ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½
+%\renewcommand{\footrulewidth}{0.0pt}%ï¿½ï¿½Îª0ptï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½
 
 
 %---------------------- Acknowledgements -------------------------------
@@ -644,16 +644,16 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 %%}
 
 
-\def\sec#1{\vspace{7mm}\noindent{{\xiaosihao\rm\bfseries{#1}}}\vspace{4mm}}% ¶¨ÒåÒ»¼¶ÕÂ½Ú
-\def\subsec#1{\vspace{5mm}\noindent{\normalsize\bfseries#1}\vspace{2mm}} %¶¨Òå¶þ¼¶ÕÂ½Ú
-\def\subsubsec#1{\vspace{4mm}\noindent{\it #1}\vspace{1mm}}%¶¨ÒåÈý¼¶ÕÂ½Ú
+\def\sec#1{\vspace{7mm}\noindent{{\xiaosihao\rm\bfseries{#1}}}\vspace{4mm}}% ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Â½ï¿½
+\def\subsec#1{\vspace{5mm}\noindent{\normalsize\bfseries#1}\vspace{2mm}} %ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
+\def\subsubsec#1{\vspace{4mm}\noindent{\it #1}\vspace{1mm}}%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
 
 \newcommand\deareditor{
     {\normalfont\normalsize\bfseries\noindent Dear editor,\par}
 }
 
 \newcommand\lettersection[1]{{\it #1}. }
-\columnsep 0.7cm  %Á½À¸Ö®¼äµÄ¾àÀë
+\columnsep 0.7cm  %ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½
 
 
 %
@@ -680,7 +680,7 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
      %\renewcommand{\thesection}{Appendix \Alph{section}\arabic{section}}
     \renewcommand{\thesubsection}{\Alph{section}\arabic{subsection}}
 
-    \renewcommand{\theequation}{{\alph{section}\arabic{equation}}}%¹«Ê½ÑÕÉ«
+    \renewcommand{\theequation}{{\alph{section}\arabic{equation}}}%ï¿½ï¿½Ê½ï¿½ï¿½É«
     \renewcommand{\thefigure}{\Alph{section}\arabic{figure}}
     \renewcommand{\thetable}{\Alph{section}\arabic{table}}
     \renewcommand{\thealgorithm}{\Alph{section}\arabic{algorithm}}
@@ -722,7 +722,7 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 }
 
 %-------------------------- Bibliography ------------------------------
-\usepackage{cite}%Ê¹¶à¸ö²ÎÎÄÖÐ¼äÓÃ--Á¬½Ó
+\usepackage{cite}%Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½--ï¿½ï¿½ï¿½ï¿½
 \def\@biblabel#1{#1~}
 \renewenvironment{thebibliography}[1]{
     \ifx\@Acknowledgements\@empty\else
@@ -771,27 +771,27 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
     \bahao\sloppy\renewcommand{\baselinestretch}{1.08} \baselineskip 10.02pt
 
 }
-\renewcommand{\UrlFont}{\selectfont} %Ê¹ÓÃ\url{}Ê¹²ÎÎÄÖÐµÄurl×Ô¶¯¶ÏÐÐ
+\renewcommand{\UrlFont}{\selectfont} %Ê¹ï¿½ï¿½\url{}Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½urlï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 
-\RequirePackage{cleveref}%Í¼±íÐòºÅ¶à¸ö1£­3
+\RequirePackage{cleveref}%Í¼ï¿½ï¿½ï¿½ï¿½Å¶ï¿½ï¿½1ï¿½ï¿½3
 
   %\PackageInfo{cleveref}{loaded `english' language definitions}
   \AtBeginDocument{
-\renewcommand{\crefrangeconjunction}{{\color{black}-}}%Á¬ÐøÊý×Ö1£­3
-%\renewcommand{\crefpairconjunction}{-}%Êý×Ö1ºÍ2
+\renewcommand{\crefrangeconjunction}{{\color{black}-}}%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½3
+%\renewcommand{\crefpairconjunction}{-}%ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½2
 
 \renewcommand{\crefpairconjunction}{ {\color{black}and}~}
       \renewcommand{\creflastconjunction}{ {\color{black}and}~}%
       \renewcommand{\crefpairgroupconjunction}{ {\color{black}and}~}%
       \renewcommand{\creflastgroupconjunction}{{\color{black}, and}~}%
 
-\crefname{table}{Table}{Tables}%%%±í¸ñÐòºÅÑÕÉ«black
-\crefname{figure}{Figure}{Figures}%%%Í¼Ìâ×ÖÑÕÉ«black
-\crefname{equation}{eq.}{eqs.}%¹«Ê½ÐòºÅÌâ×ÖÑÕÉ«black
+\crefname{table}{Table}{Tables}%%%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«black
+\crefname{figure}{Figure}{Figures}%%%Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«black
+\crefname{equation}{eq.}{eqs.}%ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«black
 \Crefname{equation}{Eq.}{Eqs.}
-\crefname{section}{sect.}{sects.}%Ð¡±êÌâ×ÖÑÕÉ«black
+\crefname{section}{sect.}{sects.}%Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«black
 \Crefname{section}{Sect.}{Sects.}
 
 
@@ -828,34 +828,34 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 %-------------------------- Figures and tables ------------------------
 
 
-%----------------------------------Í¼±íÏà¹Ø-----------------------------
+%----------------------------------Í¼ï¿½ï¿½ï¿½ï¿½ï¿½-----------------------------
 
-%\usepackage{flushend}%%(11ÔÂ×¢ÊÍ£ºË«À¸¶ÔÆëºê°ü£¬´Ë´¦²»Æð×÷ÓÃ)
-%\usepackage{balance}%%(11ÔÂ×¢ÊÍ£ºË«À¸¶ÔÆëºê°ü£¬´Ë´¦²»Æð×÷ÓÃ)
-\usepackage{booktabs}%%(11ÔÂ×¢ÊÍ£º±í¸ñºê°ü£¬¿Éµ÷Õû±í¸ñÖÐµÄÏß¿í)
-\usepackage{caption2}%%(11ÔÂ×¢ÊÍ£º±êÌâºê°ü)
-\renewcommand{\captionlabeldelim}{~~~}%%(11ÔÂ×¢ÊÍ£º¶¨Òå±êÌâ±àºÅÓë±êÌâ¼ä¿ÕÈý¸ñ)
-\captionstyle{normal} %%(11ÔÂ×¢ÊÍ£º±êÌâÁ½±ß¶ÔÆë£¬×îºóÒ»ÐÐ×ó¶ÔÆë)
-\renewcommand{\captionfont}{\footnotesize}%%(11ÔÂ×¢ÊÍ£ºÐ¡ºÅ±êÌâ)
-\renewcommand{\captionlabelfont}{\footnotesize \bfseries}%%(11ÔÂ×¢ÊÍ£ºÐ¡ºÅºÚÌå±êÌâ±àºÅ)
+%\usepackage{flushend}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+%\usepackage{balance}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+\usepackage{booktabs}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ß¿ï¿½)
+\usepackage{caption2}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+\renewcommand{\captionlabeldelim}{~~~}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+\captionstyle{normal} %%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¶ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+\renewcommand{\captionfont}{\footnotesize}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½Ð¡ï¿½Å±ï¿½ï¿½ï¿½)
+\renewcommand{\captionlabelfont}{\footnotesize \bfseries}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½Ð¡ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
  %\setbeamercolor{math text}{fg=red}
  %\setbeamercolor{math text inlined}{fg=black}
-%%\usepackage{caption}%%(11ÔÂ×¢ÊÍ£º±êÌâºê°ü£¬¿Éµ÷Õû±êÌâ×ÖÌå×ÖºÅ)
-%%\DeclareCaptionLabelSeparator{twospace}{~~}%%(11ÔÂ×¢ÊÍ£º¶¨Òå±êÌâ±àºÅÓë±êÌâ¼ä¿ÕÁ½¸ñ)
-%%\captionsetup{labelsep=twospace}%%(11ÔÂ×¢ÊÍ£º±êÌâ±àºÅÓë±êÌâ¼ä¿ÕÁ½¸ñ)
-\captionsetup{singlelinecheck=off} %%Í¼Ìâ×óÆë±êÖ¾
+%%\usepackage{caption}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öºï¿½)
+%%\DeclareCaptionLabelSeparator{twospace}{~~}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+%%\captionsetup{labelsep=twospace}%%(11ï¿½ï¿½×¢ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+\captionsetup{singlelinecheck=off} %%Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 
 
 
-%\setlength{\floatsep}{12pt plus 2pt minus 2pt}%Ò³Ãæ¶¥²¿/µ×²¿µÄ¸¡¶¯¶ÔÏó¼äµÄ´¹Ö±¾àÀë, È±Ê¡Îª12pt plus 2pt minus 2pt
-%\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}%Ò³¶¥²¿/µ×²¿µÄ¸¡¶¯¶ÔÏóÓëÎÄ±¾¼ä´¹Ö±¾àÀë, È±Ê¡20pt plus 2pt minus 4pt
-%\setlength{\intextsep}{12pt plus 2pt minus 2pt}%Ò³ÖÐ¸¡¶¯¶ÔÏóÓëÉÏÏÂ·½ÎÄ±¾¼ä´¹Ö±¾àÀë, È±Ê¡12pt plus 2pt minus 2pt
-\setlength{\belowrulesep}{0pt}%ºáÏßºÍÆäÏÂÎÄ×ÖµÄ¼ä¾à
-\setlength{\aboverulesep}{0pt}%ºáÏßºÍÆäÉÏÎÄ×ÖµÄ¼ä¾à
+%\setlength{\floatsep}{12pt plus 2pt minus 2pt}%Ò³ï¿½æ¶¥ï¿½ï¿½/ï¿½×²ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ö±ï¿½ï¿½ï¿½ï¿½, È±Ê¡Îª12pt plus 2pt minus 2pt
+%\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}%Ò³ï¿½ï¿½ï¿½ï¿½/ï¿½×²ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ä´¹Ö±ï¿½ï¿½ï¿½ï¿½, È±Ê¡20pt plus 2pt minus 4pt
+%\setlength{\intextsep}{12pt plus 2pt minus 2pt}%Ò³ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½Ä±ï¿½ï¿½ä´¹Ö±ï¿½ï¿½ï¿½ï¿½, È±Ê¡12pt plus 2pt minus 2pt
+\setlength{\belowrulesep}{0pt}%ï¿½ï¿½ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÄ¼ï¿½ï¿½
+\setlength{\aboverulesep}{0pt}%ï¿½ï¿½ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÄ¼ï¿½ï¿½
 \setlength{\abovedisplayskip}{2pt}
 \setlength{\belowdisplayskip}{2pt}
-%\setlength{\abovecaptionskip}{0mm}   %µ÷ÕûÍ¼Æ¬±êÌâÓëÍ¼¾àÀë
-%\setlength{\belowcaptionskip}{-5mm}   %µ÷ÕûÍ¼Æ¬±êÌâÓëÏÂÎÄ¾àÀë
+%\setlength{\abovecaptionskip}{0mm}   %ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½
+%\setlength{\belowcaptionskip}{-5mm}   %ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½
 
 
 
@@ -869,8 +869,8 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 \captionsetup[table]{aboveskip=3mm}
 \captionsetup[figure]{aboveskip=3mm}
 %%\captionsetup[algorithm]{font=footnotesize}
-%%\renewcommand{\thesubfigure}{{\picsize\Times(\alph{subfigure})}} %ÕâÁ½ÐÐ¶¨Òå×ÓÍ¼ÔÚÕýÎÄÒýÓÃÊ±µÄlabelÐÎÊ½
-%%\renewcommand{\thesubtable}{{\picsize(\alph{subtable})}} %×Ó±ílabelµÄ×ÖÌåÈÔºÍÕýÎÄÏàÍ¬
+%%\renewcommand{\thesubfigure}{{\picsize\Times(\alph{subfigure})}} %ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½labelï¿½ï¿½Ê½
+%%\renewcommand{\thesubtable}{{\picsize(\alph{subtable})}} %ï¿½Ó±ï¿½labelï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬
 
 %----------------------- Math ---------------------------------
 \def\leq{\leqslant}
@@ -894,7 +894,7 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 
 %--------------------------------- Theorems ---------------------------------
 \def\proof{\noindent{\it Proof}\quad}
-\def\th#1{\noindent{\bf #1}\quad}%The common style. Í¨ÓÃÐÎÊ½
+\def\th#1{\noindent{\bf #1}\quad}%The common style. Í¨ï¿½ï¿½ï¿½ï¿½Ê½
 \renewcommand{\qedsymbol}{}
 \newtheoremstyle{newdefinition}%
     {2pt}% Space above
@@ -931,11 +931,11 @@ an open access article under the CC BY-NC-ND license (http://creativecommons.org
 \let\citedash\relax
 \makeatletter \providecommand{\citedash}{\hbox{-}\penalty\@m}
 
-%%%%²Î¿¼ÎÄÏ×ÒýÓÃÀ¨ºÅÑÕÉ«\color{black}
+%%%%ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«\color{black}
 \def\@cite#1#2{{[{#1\if@tempswa , #2\fi}]}}
-%\def\@cite#1#2{\textsuperscript{\![{#1\if@tempswa , #2\fi}]}}%ÉÏ½Ç
+%\def\@cite#1#2{\textsuperscript{\![{#1\if@tempswa , #2\fi}]}}%ï¿½Ï½ï¿½
 
-%%%%¹«Ê½ÐòºÅÑÕÉ«\color{black}
+%%%%ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½É«\color{black}
 
 \let\reftagform@=\tagform@
 %\def\tagform@#1{\maketag@@@{{(\ignorespaces{#1}\unskip\@@italiccorr)}}}
