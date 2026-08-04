@@ -96,7 +96,7 @@ Immersive interfaces have been studied to improve operator perception in unmanne
 The geospatial-prior layer is grounded in 3D geospatial visualization practice. The OGC 3D Tiles specification defines an open standard for streaming massive 3D geospatial datasets \cite{ogc2022threedtiles}, making it plausible to use Cesium/Unreal as a static scene prior. To update this prior, instead of transmitting full video, the pipeline sends semantic telemetry: the detected entities and their display-relevant attributes. While this differs from theoretical deep-learning semantic communication systems \cite{luo2022semantic, xie2021semantic, shao2022edgeinference}, it offers an operational reduction in bandwidth by transmitting only task-relevant information.
 
 \subsection{UAV Perception and Variable Link Conditions}
-UAV object detection is treated as an upstream perception component \cite{cao2023uavdetection}. Vision-based UAV target geolocation has been extensively studied \cite{barber2006geolocation, hosseinpoor2016geolocation, liu2024multiview}. While modern video links (LTE, WebRTC, 5G) can achieve stable low-latency transmissions under ideal conditions \cite{mohamed2025lteuav, chodorek2025webrtc}, they still suffer from coverage-capacity trade-offs, handovers, and bandwidth constraints in rural or urban air mobility scenarios \cite{chen2025uamstreaming, chintareddy2026vertical}. The relevant scenario for our visual pipeline is an operator task in which video is available only intermittently or at reduced resolution. While multi-sensor fusion (IR, LiDAR, radar) can improve perception under low visibility \cite{li2025irvisuav, farina2026lidarradar, fercho2026faa_svs}, our current implementation uses YOLO on RGB, integrating other sensors as future work.
+UAV object detection is treated as an upstream perception component \cite{cao2023uavdetection}. Vision-based UAV target geolocation has been extensively studied \cite{barber2006geolocation, hosseinpoor2016geolocation, liu2024multiview}, including the monocular detection-to-world geopositioning method previously developed and validated by members of our group \cite{alaez2023geopositioning}, which this pipeline reuses as an upstream component (Section~\ref{sec:detection-to-world}). While modern video links (LTE, WebRTC, 5G) can achieve stable low-latency transmissions under ideal conditions \cite{mohamed2025lteuav, chodorek2025webrtc}, they still suffer from coverage-capacity trade-offs, handovers, and bandwidth constraints in rural or urban air mobility scenarios \cite{chen2025uamstreaming, chintareddy2026vertical}. The relevant scenario for our visual pipeline is an operator task in which video is available only intermittently or at reduced resolution. While multi-sensor fusion (IR, LiDAR, radar) can improve perception under low visibility \cite{li2025irvisuav, farina2026lidarradar, fercho2026faa_svs}, our current implementation uses YOLO on RGB, integrating other sensors as future work.
 
 \section{System Overview}
 
@@ -175,7 +175,7 @@ The layered state of Section~\ref{sec:scene-state} is only useful if the operato
 
 \subsection{Detection-to-World Projection}
 \label{sec:detection-to-world}
-The georeferencing step converts one bounding box into one world position under explicit camera, pose, and terrain assumptions (Figure~\ref{fig:system-overview}, zone~A detail). The detector returns a box \(b=[x_1,y_1,x_2,y_2]^T\); because the objects of interest rest on the ground, the contact evidence is the bottom-centre pixel of the box,
+The georeferencing step converts one bounding box into one world position. This step is not a contribution of the present work: it instantiates the monocular target-geopositioning formulation previously proposed and experimentally validated by members of our team \cite{alaez2023geopositioning}, here adapted to publish each estimate as semantic telemetry. We summarize the formulation for completeness, under explicit camera, pose, and terrain assumptions (Figure~\ref{fig:system-overview}, zone~A detail). The detector returns a box \(b=[x_1,y_1,x_2,y_2]^T\); because the objects of interest rest on the ground, the contact evidence is the bottom-centre pixel of the box,
 \begin{equation}
 z_b = \begin{bmatrix} u_b \\ v_b \end{bmatrix} = \begin{bmatrix} (x_1+x_2)/2 \\ y_2 \end{bmatrix},
 \end{equation}
@@ -355,6 +355,9 @@ Cao Z, Kooistra L, Wang W, et al. Real-time object detection based on UAV remote
 
 \bibitem{barber2006geolocation}
 Barber D B, Redding J D, McLain T W, et al. Vision-based target geo-location using a fixed-wing miniature air vehicle. Journal of Intelligent and Robotic Systems, 2006, 47(4): 361--382. doi: \url{https://doi.org/10.1007/s10846-006-9088-7}
+
+\bibitem{alaez2023geopositioning}
+Al\'aez D, Mygdalis V, Villadangos J, Pitas I. Real-time object geopositioning from monocular target detection/tracking for aerial cinematography. In: 2023 IEEE 25th International Workshop on Multimedia Signal Processing (MMSP), Poitiers, France, 2023, pp. 1--6. doi: \url{https://doi.org/10.1109/MMSP59012.2023.10337638}
 
 \bibitem{hosseinpoor2016geolocation}
 Hosseinpoor H R, Samadzadegan F, Dadrasjavan F. Precise target geolocation and tracking based on UAV video imagery. ISPRS - International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences, 2016, XLI-B6: 243--249. doi: \url{https://doi.org/10.5194/isprsarchives-XLI-B6-243-2016}
