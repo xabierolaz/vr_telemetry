@@ -101,12 +101,15 @@ UAV object detection is treated as an upstream perception component \cite{cao202
 \section{System Overview}
 
 \subsection{Operator Scenario}
+\label{sec:operator-scenario}
 The target scenario is a UAV mission in which a remote operator needs to monitor terrain, aircraft state, obstacles, or mission objects while communication quality is constrained. The operator wears a VR headset and inspects a synthetic 3D scene containing a geospatial prior, UAV pose, detected entities, freshness indicators, and uncertainty indicators. The proposed display is auxiliary and should be used alongside regulatory control links and operational procedures. Figure~\ref{fig:system-overview} shows the complete system with the real validation assets: a one-way semantic downlink, an independent command-and-control uplink, the ground-station reconstruction, and the operator's head-tracked stereo view.
+
+The workflow follows the four operating zones of Figure~\ref{fig:system-overview}. In zone~A (real UAV), the onboard detector emits per-object observations (class, bounding box, confidence) and the autopilot logs the aircraft pose; each detection is then localized geometrically (bottom panel, formalized in Section~\ref{sec:detection-to-world}). In zone~B (link), only the resulting per-object semantic packets travel the downlink---no continuous video---while pilot commands use the independent C2 uplink. In zone~C (ground backend), a state-snapshot service fuses both asynchronous streams into one canonical record, polled at 5~Hz. In zone~D (digital twin and pilot), Unreal Engine~5/Cesium reconstructs the scene and spawns a persistent proxy actor at each reported \code{world\_m} position, which the pilot inspects through a head-tracked stereo view.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/fig_system_overview.png}
-\caption{System overview with the real validation assets and detail of the detection-to-world projection. Top: zone A (real UAV) detects and localizes objects onboard; zone B (link) carries only per-object semantic packets---no continuous video---while pilot commands use the independent C2 uplink; zone C (ground backend) fuses both asynchronous streams into one canonical record polled at 5~Hz; zone D (digital twin/pilot) reconstructs the scene in Unreal Engine~5/Cesium for the operator's head-tracked stereo view. Bottom (zone A detail): the bottom-centre pixel $z_b$ of the bounding box defines a ray that, rotated by the camera mount and the logged attitude into the NED frame, intersects the ground plane at slant range $t_b = h / r_{n,D}$, yielding the offsets $(N,E)$ published as \code{world\_m} (Section~\ref{sec:detection-to-world}). Packet contents and confidence values shown in zones A and B are illustrative examples.}
+\caption{System overview (top) with the real validation assets, and detail of the detection-to-world geometric localization (bottom). The four operating zones and the end-to-end workflow are described in Section~\ref{sec:operator-scenario}; the projection geometry is formalized in Section~\ref{sec:detection-to-world}. Packet contents and confidence values shown are illustrative.}
     \label{fig:system-overview}
 \end{figure}
 
