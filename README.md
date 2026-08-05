@@ -18,9 +18,22 @@ Instead of streaming video, the aircraft downlinks per-object semantic telemetry
 
 ## Repository contents
 
+| Path | Content |
+|---|---|
+| `main.tex` | Full manuscript |
+| `VRIH2025.cls` | Journal class (compiles with both pdfLaTeX and XeLaTeX) |
+| `figures/` | Figures referenced by the manuscript |
 | `media/` | Demo video: side-by-side real flight vs. digital twin (GIF preview + full mp4) |
 
 ## Resources
 
 - **Real-flight video:** `video_final.mp4` in the [Resources release](../../releases/tag/resources) — onboard recording of the validation flight used in the paper, with synchronized telemetry (`video_final_gps.csv`, `video_final_sync.json` included in the same release).
 - **Side-by-side demo video:** [`media/side_by_side_twin.mp4`](media/side_by_side_twin.mp4) — real flight with YOLO detections next to the synchronized digital-twin reconstruction (see GIF preview above).
+
+## Compile the paper
+
+`pdflatex main.tex` (default) or `xelatex main.tex` — the class selects fonts accordingly (`\ifPDFTeX` guard, no fontspec required under pdfLaTeX).
+
+## Citation
+
+Citation details will be added upon publication.
